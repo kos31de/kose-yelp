@@ -80,7 +80,7 @@ text = "Search restaurants by your location and category. Say 'hungry!' "
   }
   request_body = content.to_json # convert to json
   #reply by POST
-  RestClient.post endpoint, FB_ENDPOINT, request_body, content_type: :json, accept: :json
+  RestClient.post FB_ENDPOINT, request_body, content_type: :json, accept: :json
   end
   status 201
   body ''
