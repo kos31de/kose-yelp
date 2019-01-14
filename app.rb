@@ -29,6 +29,20 @@ helpers do
     }.to_json
   end
 
+  def set_quick_reply_of_location sender
+    {
+      recipient: {
+        id: sender
+      },
+      message: {
+        text: "Tell me your location information :P",
+        quick_replies: [
+          { content_type: "location" }
+        ]
+      }
+    }.to_json
+  end
+
   # quicl reply. category is up to 11.
   def filter_categories
       categories = []
@@ -104,7 +118,6 @@ helpers do
         }
       }.to_json
     end
-
 end
 
 
