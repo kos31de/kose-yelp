@@ -18,7 +18,7 @@ post '/callback' do
   message = hash["entry"][0]["messaging"][0] #entryの0個目のmessagingの0個目
   sender = message["sender"]["id"] #上記で取得したmessage変数の中のsenderのid
   text = message["message"]["text"]#上記で取得したmessage変数の中のmessageのtest
-  endpoint = "https://graph.facebook.com/v2.6/me/messages?access_token=" + "EAAf9VlE5LSsBAHYtSZC3BuXnfWwG32BzWZB3oeIiRSVxG9mmFLMa3vGfdlxklQ9ZA7dB1aOI56woQoJ2ZAmWTBXVWU6nj1tbMpI5s9QPT40iZAZBad9keicRN2TSRn44bxSJDAJlHL09PxcjqvRSKkg1XZCwgjB8H9Awvmejq03gySnpvYqw4EL"
+  endpoint = "https://graph.facebook.com/v2.6/me/messages?access_token=" + "EAAf9VlE5LSsBAMZBnEDd6kQlnHzhDGE3XHQXHe8ZApLWmeC2JiHxOHk29JwU4AnpXvJHxkRFI1ALx3cZAutrc8ybFfLAbXONRENzgFTIukyZCrSO7LxhtLb09yRGyAZCd6CSHvjMZAPfuEl1CyPD5ZAjMqehga8cxm2AkD8AEMPHbnOuGkstrfB"
   content = {
     recipient: {id: sender},
     message: {text: text}
