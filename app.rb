@@ -21,7 +21,7 @@ helpers do
         id: sender
       },
       message: {
-        text: 'Thanks :P Please tell me, what do you wanna eat?'
+        text: 'Thanks :P Please tell me, what do you wanna eat?',
         quick_replies: categories
       }
     }.to_json
