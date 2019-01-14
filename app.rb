@@ -46,6 +46,13 @@ helpers do
       end
       categories
     end
+
+    # get location
+    def get_location message
+      lat = message["message"]["attachments"][0]["payload"]["coordinates"]["lat"]
+      long = message["message"]["attachments"][0]["payload"]["coordinates"]["long"]
+      [lat, long]
+    end
 end
 
 
@@ -63,6 +70,7 @@ end
 
 # when receiving message
 post '/callback' do
+  # keep message and senderID
   hash = JSON.parse(request.body.read)
   message = hash["entry"][0]["messaging"][0]
   sender = message["sender"]["id"]
@@ -70,6 +78,17 @@ post '/callback' do
 if message["message"]["text"] == "hungry!"
   categories = filter_categories
   request_body = set_quick_reply_of_categories(sender, categories)
+  RestClient.post FB_ENDPOINT, request_body, content_type: :json, accept: :json  
+# if category was selected, request the location
+elsif !message["message"]["quick_reply"].nil?
+    $requested_category_code = message["message"]["quick_reply"]["payload"]
+    request_body = set_quick_reply_of_location(sender)
+    RestClient.post FB_ENDPOINT, request_body, content_type: :json, accept: :json
+elsif !message["message"]["attachments"].nil? && message["message"]["attachments"][0]["type"] == 'location' && !$requested_category_code.nil?
+  lat, long = get_location(message)
+  restaurants = get_restaurants(lat, long, $requested_category_code)
+  elements = set_restaurants_info(restaurants)
+  request_body = set_reply_of_restaurant(sender, elements)
   RestClient.post FB_ENDPOINT, request_body, content_type: :json, accept: :json
 else
   #  add message in text 
