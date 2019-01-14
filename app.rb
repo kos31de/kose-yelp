@@ -56,7 +56,7 @@ end
 # initial auth
 get '/callback' do
   if params["hub.verify_token"] != 'foobarbaz'
-    return 'Error, wrong validation tokenz'
+    return 'Error, wrong validation token'
   end
     params["hub.challenge"]
 end
