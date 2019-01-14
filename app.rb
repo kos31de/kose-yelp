@@ -12,3 +12,10 @@ get '/callback' do
   end
     params["hub.challenge"]
 end
+
+post '/callback' do
+  request_body = JSON.parse(request.body.read)
+  puts request_body
+  status 201
+  body ''
+end
