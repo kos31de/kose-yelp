@@ -70,7 +70,7 @@ helpers do
     end
 
     def get_restaurants lat, long, requested_category_code
-      # 緯度,経度,カテゴリー,範囲を指定
+      # location and category select
       params = "?keyid=#{GNAVI_KEYID}&latitude=#{lat}&longitude=#{long}&category_l=#{requested_category_code}&range=3"
       restaurants = JSON.parse(RestClient.get GNAVI_SEARCHAPI + params)
       restaurants
