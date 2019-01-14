@@ -66,7 +66,9 @@ post '/callback' do
   sender = message["sender"]["id"]
 
 if message["message"]["text"] == "hungry!"
-
+  categories = filter_categories
+  request_body = set_quick_reply_of_categories(sender, categories)
+  RestClient.post FB_ENDPOINT, request_body, content_type: :json, accept: :json
 else
   #  add message in text 
 text = "Search restaurants by your location and category. Say 'hungry!' "
