@@ -21,7 +21,7 @@ helpers do
         id: sender
       },
       message: {
-        text: 'Thanks :P What do you wanna eat?'
+        text: 'Thanks :P Please tell me, what do you wanna eat?'
         quick_replies: categories
       }
     }.to_json
@@ -29,22 +29,22 @@ helpers do
 
   # quicl reply. category is up to 11.
   def filter_categories
-    categories = []
-    get_categories.each_with_index do |category, i|
-      if i < 11
-        hash = {
-          content_type: 'text',
-          title: category["category_l_name"],
-          payload: category["category_l_code"],
-        }
-        p hash
-        categories.push(hash)
-      else
-        p "dont add 11th into categories"
+      categories = []
+      get_categories.each_with_index do |category, i|
+        if i < 11
+          hash = {
+            content_type: 'text',
+            title: category["category_l_name"],
+            payload: category["category_l_code"],
+          }
+          p hash
+          categories.push(hash)
+        else
+          p "dont add 11th into categories"
+        end
       end
+      categories
     end
-    categories
-  end
 end
 
 
@@ -79,7 +79,7 @@ text = "Search restaurants by your location and category. Say 'hungry!' "
   }
   request_body = content.to_json # convert to json
   #reply by POST
-  RestClient.post endpoint, request_body, content_type: :json, accept: :json
+  RestClient.post endpoint, FB_ENDPOINT, request_body, content_type: :json, accept: :json
   end
   status 201
   body ''
