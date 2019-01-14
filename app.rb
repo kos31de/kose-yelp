@@ -7,18 +7,6 @@ FB_ENDPOINT = "https://graph.facebook.com/v2.6/me/messages?access_token=" + "EAA
 GNAVI_KEYID = "50f3f62e0ff8c812044c1e69d7d5ea08"
 GNAVI_CATEGORY_LARGE_SEARCH_API = "https://api.gnavi.co.jp/master/CategoryLargeSearchAPI/v3/"
 
-
-get '/' do
-  'hello'
-end
-
-get '/callback' do
-  if params["hub.verify_token"] != 'foobarbaz'
-    return 'Error, wrong validation tokenz'
-  end
-    params["hub.challenge"]
-end
-
 helpers do
   # Get vategory from gurunavi API
   def get_categories
@@ -26,6 +14,19 @@ helpers do
     categories = response["category_l"]
     categories
   end
+
+  def set_quick_reply_of_categories sender, categories
+    {
+      recipient: {
+        id: sender
+      },
+      message: {
+        text: 'Thanks :P What do you wanna eat?'
+        quick_replies: categories
+      }
+    }.to_json
+  end
+
   # quicl reply. category is up to 11.
   def filter_categories
     categories = []
@@ -44,20 +45,20 @@ helpers do
     end
     categories
   end
-
-  def set_quick_reply_of_categories sender, categories
-    {
-      recipient: {
-        id: sender
-      },
-      message: {
-        text: 'Thanks :P What do you wanna eat?'
-        quick_replies: categories
-      }
-    }.to_json
-  end
 end
 
+
+get '/' do
+  'hello'
+end
+
+# initial auth
+get '/callback' do
+  if params["hub.verify_token"] != 'foobarbaz'
+    return 'Error, wrong validation tokenz'
+  end
+    params["hub.challenge"]
+end
 
 # when receiving message
 post '/callback' do
