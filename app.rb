@@ -7,6 +7,7 @@ require 'pry'
 FB_ENDPOINT = "https://graph.facebook.com/v2.6/me/messages?access_token=" + "EAAf9VlE5LSsBAMZBnEDd6kQlnHzhDGE3XHQXHe8ZApLWmeC2JiHxOHk29JwU4AnpXvJHxkRFI1ALx3cZAutrc8ybFfLAbXONRENzgFTIukyZCrSO7LxhtLb09yRGyAZCd6CSHvjMZAPfuEl1CyPD5ZAjMqehga8cxm2AkD8AEMPHbnOuGkstrfB"
 GNAVI_KEYID = "50f3f62e0ff8c812044c1e69d7d5ea08"
 GNAVI_CATEGORY_LARGE_SEARCH_API = "https://api.gnavi.co.jp/master/CategoryLargeSearchAPI/v3/"
+GNAVI_SEARCHAPI = "https://api.gnavi.co.jp/RestSearchAPI/v3/"
 
 helpers do
   # Get vategory from gurunavi API
