@@ -4,6 +4,9 @@ require 'json'
 require 'rest-client'
 
 FB_ENDPOINT = "https://graph.facebook.com/v2.6/me/messages?access_token=" + "EAAf9VlE5LSsBAMZBnEDd6kQlnHzhDGE3XHQXHe8ZApLWmeC2JiHxOHk29JwU4AnpXvJHxkRFI1ALx3cZAutrc8ybFfLAbXONRENzgFTIukyZCrSO7LxhtLb09yRGyAZCd6CSHvjMZAPfuEl1CyPD5ZAjMqehga8cxm2AkD8AEMPHbnOuGkstrfB"
+GNAVI_KEYID = "50f3f62e0ff8c812044c1e69d7d5ea08"
+GNAVI_CATEGORY_LARGE_SEARCH_API = "https://api.gnavi.co.jp/master/CategoryLargeSearchAPI/v3/"
+
 
 get '/' do
   'hello'
@@ -22,17 +25,46 @@ post '/callback' do
   message = hash["entry"][0]["messaging"][0]
   sender = message["sender"]["id"]
 
+if message["message"]["text"] == "hungry!"
+
+else
   #  add message in text 
 text = "Search restaurants by your location and category. Say 'hungry!' "
-  endpoint = "https://graph.facebook.com/v2.6/me/messages?access_token=" + "EAAf9VlE5LSsBAMZBnEDd6kQlnHzhDGE3XHQXHe8ZApLWmeC2JiHxOHk29JwU4AnpXvJHxkRFI1ALx3cZAutrc8ybFfLAbXONRENzgFTIukyZCrSO7LxhtLb09yRGyAZCd6CSHvjMZAPfuEl1CyPD5ZAjMqehga8cxm2AkD8AEMPHbnOuGkstrfB"
   content = {
     recipient: {id: sender},
     message: {text: text}
   }
   request_body = content.to_json # convert to json
-
   #reply by POST
   RestClient.post endpoint, request_body, content_type: :json, accept: :json
+  end
   status 201
   body ''
+end
+
+helpers do
+  # Get vategory from gurunavi API
+  def get_categories
+    response = JSON.parse(RestClient.get GNAVI_CATEGORY_LARGE_SEARCH_API + "?keyid=#{GNAVI_KEYID}")
+    categories = response["category_l"]
+    categories
+  end
+  # quicl reply. category is up to 11.
+  def filter_categories
+    categories = []
+    get_categories.each_with_index do |category, i|
+      if i < 11
+        hash = {
+          content_type: 'text',
+          title: category["category_l_name"],
+          payload: category["category_l_code"],
+        }
+        p hash
+        categories.push(hash)
+      else
+        p "dont add 11th into categories"
+      end
+    end
+    categories
+  end
 end
