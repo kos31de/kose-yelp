@@ -19,29 +19,6 @@ get '/callback' do
     params["hub.challenge"]
 end
 
-# when receiving message
-post '/callback' do
-  hash = JSON.parse(request.body.read)
-  message = hash["entry"][0]["messaging"][0]
-  sender = message["sender"]["id"]
-
-if message["message"]["text"] == "hungry!"
-
-else
-  #  add message in text 
-text = "Search restaurants by your location and category. Say 'hungry!' "
-  content = {
-    recipient: {id: sender},
-    message: {text: text}
-  }
-  request_body = content.to_json # convert to json
-  #reply by POST
-  RestClient.post endpoint, request_body, content_type: :json, accept: :json
-  end
-  status 201
-  body ''
-end
-
 helpers do
   # Get vategory from gurunavi API
   def get_categories
@@ -67,4 +44,40 @@ helpers do
     end
     categories
   end
+
+  def set_quick_reply_of_categories sender, categories
+    {
+      recipient: {
+        id: sender
+      },
+      message: {
+        text: 'Thanks :P What do you wanna eat?'
+        quick_replies: categories
+      }
+    }.to_json
+  end
+end
+
+
+# when receiving message
+post '/callback' do
+  hash = JSON.parse(request.body.read)
+  message = hash["entry"][0]["messaging"][0]
+  sender = message["sender"]["id"]
+
+if message["message"]["text"] == "hungry!"
+
+else
+  #  add message in text 
+text = "Search restaurants by your location and category. Say 'hungry!' "
+  content = {
+    recipient: {id: sender},
+    message: {text: text}
+  }
+  request_body = content.to_json # convert to json
+  #reply by POST
+  RestClient.post endpoint, request_body, content_type: :json, accept: :json
+  end
+  status 201
+  body ''
 end
